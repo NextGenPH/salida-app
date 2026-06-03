@@ -5,6 +5,7 @@ import { Movie } from '@/types/movie';
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { useSalidaStore } from '@/store/useSalidaStore';
+import { Spinner } from '@/components/Spinner';
 
 export default function MovieDetailsPage() {
   const params = useParams();
@@ -54,7 +55,7 @@ export default function MovieDetailsPage() {
     }
   }, [id]);
 
-  if (!movie) return <div className="p-10 text-white">Loading...</div>;
+  if (!movie) return <div className="p-10 text-white"><Spinner /></div>;
 const handlePlay = () => {
   setShowPlayer(true);
 };

@@ -5,6 +5,7 @@ import { TVShow } from '@/types/tv';
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { useSalidaStore } from '@/store/useSalidaStore';
+import { Spinner } from '@/components/Spinner';
 
 export default function TVShowDetailsPage() {
   const params = useParams();
@@ -41,7 +42,7 @@ export default function TVShowDetailsPage() {
     }
   }, [id, selectedSeason, show]);
 
-  if (!show) return <div className="p-10 text-white">Loading...</div>;
+  if (!show) return <div className="p-10 text-white"><Spinner /></div>;
 
   const isInWatchlist = watchlist.some((m) => m.id === show.id);
 

@@ -56,43 +56,40 @@ export default function MovieDetailsPage() {
           alt={movie.title}
           className="h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/60" />
-        <div className="absolute bottom-5 left-5 md:bottom-10 md:left-10">
-          <h1 className="text-3xl md:text-5xl font-bold">{movie.title}</h1>
-          <p className="mt-2 text-sm md:text-lg text-gray-300">{movie.tagline}</p>
-          <div className="mt-4 space-y-4">
-            {/* Primary Action Buttons */}
-            <div className="flex flex-wrap gap-2">
+        <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-black/50 to-transparent" />
+        <div className="absolute bottom-5 left-5 md:bottom-12 md:left-12 max-w-2xl">
+          <h1 className="text-4xl md:text-6xl font-extrabold text-white drop-shadow-lg">{movie.title}</h1>
+          <p className="mt-2 text-base md:text-xl text-gray-200 drop-shadow-md">{movie.tagline}</p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <button
+              onClick={() => setShowPlayer(true)}
+              className="bg-white px-8 py-3 rounded font-bold text-black hover:bg-gray-200 transition flex items-center gap-2"
+            >
+              Play
+            </button>
+            {trailerKey && (
               <button
-                onClick={() => setShowPlayer(true)}
-                className="bg-[#E50914] px-6 py-2 md:px-8 md:py-3 rounded-full font-bold text-white hover:bg-red-700 transition"
+                onClick={() => setShowTrailer(true)}
+                className="bg-gray-600/70 px-8 py-3 rounded font-bold text-white hover:bg-gray-600 transition flex items-center gap-2"
               >
-                Play
+                Watch Trailer
               </button>
-              {trailerKey && (
-                <button
-                  onClick={() => setShowTrailer(true)}
-                  className="bg-white px-6 py-2 md:px-8 md:py-3 rounded-full font-bold text-black hover:bg-gray-200 transition"
-                >
-                  Watch Trailer
-                </button>
-              )}
-              <button
-                onClick={toggleWatchlist}
-                className={`px-6 py-2 md:px-8 md:py-3 rounded-full font-bold text-white transition ${
-                  isInWatchlist ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-700 hover:bg-gray-600'
-                }`}
-              >
-                {isInWatchlist ? 'In My List' : '+ My List'}
-              </button>
-            </div>
-            
-            {/* Metadata Line */}
-            <div className="flex flex-wrap items-center gap-2 text-sm text-gray-300">
-              <span className="font-bold text-white">Rating: {movie.vote_average.toFixed(1)}</span>
-              {movie.runtime && <span>• {movie.runtime} min</span>}
-              <span>• {movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A'}</span>
-            </div>
+            )}
+            <button
+              onClick={toggleWatchlist}
+              className={`px-8 py-3 rounded font-bold text-white transition ${
+                isInWatchlist ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-600/70 hover:bg-gray-600'
+              }`}
+            >
+              {isInWatchlist ? 'In My List' : '+ My List'}
+            </button>
+          </div>
+          
+          {/* Metadata */}
+          <div className="flex flex-wrap items-center gap-3 mt-6 text-sm md:text-base text-gray-300">
+            <span className="font-bold text-green-500">{(movie.vote_average * 10).toFixed(0)}% Match</span>
+            <span>{movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A'}</span>
+            {movie.runtime && <span className="border border-gray-500 px-1 rounded">{movie.runtime} min</span>}
           </div>
         </div>
       </div>

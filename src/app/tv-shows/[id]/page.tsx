@@ -13,11 +13,13 @@ export default function TVShowDetailsPage() {
 
   const handlePlay = () => {
     setShowPlayer(true);
-    addRecentlyViewed({
+    if (show) {
+      addRecentlyViewed({
         id: show.id,
         title: show.name,
         poster_path: show.poster_path,
-    });
+      });
+    }
   };
   const [show, setShow] = useState<TVShow | null>(null);
   const [showPlayer, setShowPlayer] = useState(false);

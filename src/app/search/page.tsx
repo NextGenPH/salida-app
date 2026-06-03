@@ -46,23 +46,25 @@ export default function SearchPage() {
   }, [query, type]);
 
   return (
-    <div className="p-5 md:p-10 pt-24 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6">Search</h1>
-      
-      <div className="flex gap-6 mb-6">
-        <label className="flex items-center gap-2"><input type="radio" value="movie" checked={type === 'movie'} onChange={(e) => setType(e.target.value as 'movie')} /> Movies</label>
-        <label className="flex items-center gap-2"><input type="radio" value="tv" checked={type === 'tv'} onChange={(e) => setType(e.target.value as 'tv')} /> TV Shows</label>
+    <div className="pt-24 pb-10 min-h-screen">
+      <div className="relative px-5 md:px-10 py-12 md:py-20 mb-8 bg-gradient-to-br from-[#E50914] to-[#831010] rounded-b-3xl">
+        <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6">Explore</h1>
+        
+        <div className="flex gap-6 mb-6 text-white font-medium">
+          <label className="flex items-center gap-2 cursor-pointer"><input type="radio" value="movie" checked={type === 'movie'} onChange={(e) => setType(e.target.value as 'movie')} className="accent-white" /> Movies</label>
+          <label className="flex items-center gap-2 cursor-pointer"><input type="radio" value="tv" checked={type === 'tv'} onChange={(e) => setType(e.target.value as 'tv')} className="accent-white" /> TV Shows</label>
+        </div>
+
+        <input
+          type="text"
+          placeholder={`Search for ${type}s...`}
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="w-full p-4 rounded-full bg-white/20 backdrop-blur-md text-white placeholder-white/70 focus:outline-none focus:bg-white/30 transition"
+        />
       </div>
 
-      <input
-        type="text"
-        placeholder={`Search for ${type}s...`}
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        className="w-full p-4 rounded-md bg-[#222] text-white mb-6"
-      />
-
-      {loading && <p>Searching...</p>}
+      {loading && <p className="px-5 md:px-10 text-white">Searching...</p>}
 
       <div className="space-y-4">
         {results.map((item) => (

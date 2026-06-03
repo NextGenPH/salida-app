@@ -50,15 +50,14 @@ export default function MoviesPage() {
         <button 
           disabled={page === 1}
           onClick={() => setPage(p => p - 1)}
-          className="bg-gray-800 px-4 py-2 rounded disabled:opacity-50"
+          className="bg-gray-800 px-6 py-2 rounded disabled:opacity-50 hover:bg-gray-700 transition"
         >
           Previous
         </button>
-        <span className="text-white">Page {page} of {totalPages}</span>
         <button 
           disabled={page >= totalPages}
           onClick={() => setPage(p => p + 1)}
-          className="bg-gray-800 px-4 py-2 rounded disabled:opacity-50"
+          className="bg-gray-800 px-6 py-2 rounded disabled:opacity-50 hover:bg-gray-700 transition"
         >
           Next
         </button>

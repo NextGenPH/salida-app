@@ -10,13 +10,17 @@ import { Movie } from '@/types/movie';
 export default function TVShowsPage() {
   const [shows, setShows] = useState<TVShow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    tmdbClient.get<{ results: TVShow[] }>('/trending/tv/week').then(res => {
+    setLoading(true);
+    tmdbClient.get<{ results: TVShow[]; total_pages: number }>(`/trending/tv/week?page=${page}`).then(res => {
         setShows(res.data.results);
+        setTotalPages(res.data.total_pages);
         setLoading(false);
     });
-  }, []);
+  }, [page]);
 
   return (
     <div className="pt-24 pb-10">
@@ -36,6 +40,24 @@ export default function TVShowsPage() {
               />
             ))
         }
+      </div>
+      
+      {/* Pagination */}
+      <div className="flex justify-center items-center gap-4 mt-8">
+        <button 
+          disabled={page === 1}
+          onClick={() => setPage(p => p - 1)}
+          className="bg-gray-800 px-6 py-2 rounded disabled:opacity-50 hover:bg-gray-700 transition"
+        >
+          Previous
+        </button>
+        <button 
+          disabled={page >= totalPages}
+          onClick={() => setPage(p => p + 1)}
+          className="bg-gray-800 px-6 py-2 rounded disabled:opacity-50 hover:bg-gray-700 transition"
+        >
+          Next
+        </button>
       </div>
     </div>
   );

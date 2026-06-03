@@ -6,4 +6,5 @@ export interface TVShow {
   overview: string;
   vote_average: number;
   first_air_date: string;
+  seasons?: { season_number: number }[];
 }

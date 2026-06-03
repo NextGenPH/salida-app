@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { tmdbClient } from '@/lib/api/tmdbClient';
 import { MovieCard } from '@/components/MovieCard';
 import { MovieSkeleton } from '@/components/MovieSkeleton';
+import { FilterBar } from '@/components/FilterBar';
 import { TVShow } from '@/types/tv';
 import { Movie } from '@/types/movie';
 

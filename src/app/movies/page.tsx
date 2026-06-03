@@ -11,6 +11,8 @@ export default function MoviesPage() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({ genre: '', country: '', year: '', sortBy: 'popularity.desc' });
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchMovies = async () => {

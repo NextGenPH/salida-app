@@ -9,10 +9,10 @@ import { useSalidaStore } from '@/store/useSalidaStore';
 export default function MovieDetailsPage() {
   const params = useParams();
   const id = params?.id as string;
-  const { watchlist, addToWatchlist, removeFromWatchlist, addRecentlyViewed, updateContinueWatching } = useSalidaStore();
+  const { watchlist, addToWatchlist, removeFromWatchlist, updateContinueWatching } = useSalidaStore();
   const [movie, setMovie] = useState<Movie | null>(null);
   const [showPlayer, setShowPlayer] = useState(false);
-  const [selectedServer, setSelectedServer] = useState<'vidsrc' | 'vidlink'>('vidsrc');
+  const [selectedServer, setSelectedServer] = useState<'vidsrc' | 'vidlink'>('vidlink');
   const [showTrailer, setShowTrailer] = useState(false);
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const [cast, setCast] = useState<any[]>([]);
@@ -55,15 +55,9 @@ export default function MovieDetailsPage() {
   }, [id]);
 
   if (!movie) return <div className="p-10 text-white">Loading...</div>;
-
-  const handlePlay = () => {
-    setShowPlayer(true);
-    addRecentlyViewed({
-        id: movie.id,
-        title: movie.title,
-        poster_path: movie.poster_path,
-    });
-  };
+const handlePlay = () => {
+  setShowPlayer(true);
+};
 
   const isInWatchlist = watchlist.some((m) => m.id === movie.id);
 

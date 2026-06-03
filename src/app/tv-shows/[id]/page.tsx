@@ -9,21 +9,14 @@ import { useSalidaStore } from '@/store/useSalidaStore';
 export default function TVShowDetailsPage() {
   const params = useParams();
   const id = params?.id as string;
-  const { watchlist, addToWatchlist, removeFromWatchlist, addRecentlyViewed } = useSalidaStore();
+  const { watchlist, addToWatchlist, removeFromWatchlist } = useSalidaStore();
 
   const handlePlay = () => {
     setShowPlayer(true);
-    if (show) {
-      addRecentlyViewed({
-        id: show.id,
-        title: show.name,
-        poster_path: show.poster_path,
-      });
-    }
   };
   const [show, setShow] = useState<TVShow | null>(null);
   const [showPlayer, setShowPlayer] = useState(false);
-  const [selectedServer, setSelectedServer] = useState<'vidsrc' | 'vidlink'>('vidsrc');
+  const [selectedServer, setSelectedServer] = useState<'vidsrc' | 'vidlink'>('vidlink');
   const [cast, setCast] = useState<any[]>([]);
 
   useEffect(() => {

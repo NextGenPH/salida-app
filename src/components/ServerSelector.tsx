@@ -1,4 +1,4 @@
-import { SERVERS } from '../../lib/constants';
+import { SERVERS } from './constants';
 
 interface ServerSelectorProps {
   selected: string;

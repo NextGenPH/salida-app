@@ -1,11 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-
-interface Movie {
-  id: number;
-  title: string;
-  poster_path: string | null;
-}
+import { Movie } from '@/types/movie';
 
 interface SalidaState {
   watchlist: Movie[];

@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { useSalidaStore } from '@/store/useSalidaStore';
 import { Spinner } from '@/components/Spinner';
+import { ServerSelector } from '@/components/ServerSelector';
 
 export default function TVShowDetailsPage() {
   const params = useParams();

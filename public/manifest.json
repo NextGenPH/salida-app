@@ -1,0 +1,16 @@
+{
+  "name": "SALIDA",
+  "short_name": "SALIDA",
+  "description": "Netflix-inspired streaming platform",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#141414",
+  "theme_color": "#E50914",
+  "icons": [
+    {
+      "src": "/next.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

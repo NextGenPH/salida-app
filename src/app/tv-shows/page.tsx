@@ -10,21 +10,35 @@ import { Movie } from '@/types/movie';
 export default function TVShowsPage() {
   const [shows, setShows] = useState<TVShow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [filters, setFilters] = useState({ genre: '', country: '', year: '', sortBy: 'popularity.desc' });
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    setLoading(true);
-    tmdbClient.get<{ results: TVShow[]; total_pages: number }>(`/trending/tv/week?page=${page}`).then(res => {
-        setShows(res.data.results);
-        setTotalPages(res.data.total_pages);
-        setLoading(false);
-    });
-  }, [page]);
+    const fetchShows = async () => {
+        setLoading(true);
+        const params: any = { 
+            page,
+            sort_by: filters.sortBy,
+            'vote_count.gte': 50
+        };
+        if (filters.genre) params.with_genres = filters.genre;
+        if (filters.country) params.with_origin_country = filters.country;
+        if (filters.year) params.first_air_date_year = filters.year;
+
+        tmdbClient.get<{ results: TVShow[]; total_pages: number }>(`/discover/tv`, { params }).then(res => {
+            setShows(res.data.results);
+            setTotalPages(res.data.total_pages);
+            setLoading(false);
+        });
+    }
+    fetchShows();
+  }, [filters, page]);
 
   return (
     <div className="pt-24 pb-10">
       <h1 className="text-4xl font-bold px-5 md:px-10 mb-6">Trending TV Shows</h1>
+      <FilterBar onFilterChange={(f) => { setFilters(f); setPage(1); }} />
       <div className="p-5 md:p-10 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
         {loading
           ? Array.from({ length: 12 }).map((_, i) => <MovieSkeleton key={i} />)

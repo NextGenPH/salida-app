@@ -10,14 +10,17 @@ import { FilterBar } from '@/components/FilterBar';
 export default function MoviesPage() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState({ genre: '', country: '', year: '' });
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [filters, setFilters] = useState({ genre: '', country: '', year: '', sortBy: 'popularity.desc' });
 
   useEffect(() => {
     const fetchMovies = async () => {
       setLoading(true);
-      const params: any = { page };
+      const params: any = { 
+        page, 
+        include_adult: false,
+        sort_by: filters.sortBy,
+        'vote_count.gte': 50
+      };
       if (filters.genre) params.with_genres = filters.genre;
       if (filters.country) params.with_origin_country = filters.country;
       if (filters.year) params.primary_release_year = filters.year;

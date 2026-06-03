@@ -10,13 +10,19 @@ export default function MovieDetailsPage() {
   const params = useParams();
   const id = params?.id as string;
   const { watchlist, addToWatchlist, removeFromWatchlist, addRecentlyViewed, updateContinueWatching } = useSalidaStore();
+  const [movie, setMovie] = useState<Movie | null>(null);
+  const [showPlayer, setShowPlayer] = useState(false);
+  const [selectedServer, setSelectedServer] = useState<'vidsrc' | 'vidlink'>('vidsrc');
+  const [showTrailer, setShowTrailer] = useState(false);
+  const [trailerKey, setTrailerKey] = useState<string | null>(null);
+  const [cast, setCast] = useState<any[]>([]);
+  const [similar, setSimilar] = useState<any[]>([]);
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (event.origin !== 'https://vidlink.pro') return;
       if (event.data?.type === 'MEDIA_DATA') {
         const data = event.data.data;
-        // Basic check for movie vs tv to normalize data
         const movieId = parseInt(Object.keys(data)[0]);
         const media = data[movieId];
         
@@ -33,13 +39,6 @@ export default function MovieDetailsPage() {
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
   }, [updateContinueWatching]);
-  const [movie, setMovie] = useState<Movie | null>(null);
-  const [showPlayer, setShowPlayer] = useState(false);
-  const [selectedServer, setSelectedServer] = useState<'vidsrc' | 'vidlink'>('vidsrc');
-  const [showTrailer, setShowTrailer] = useState(false);
-  const [trailerKey, setTrailerKey] = useState<string | null>(null);
-  const [cast, setCast] = useState<any[]>([]);
-  const [similar, setSimilar] = useState<any[]>([]);
 
   useEffect(() => {
     if (id) {
@@ -56,6 +55,15 @@ export default function MovieDetailsPage() {
   }, [id]);
 
   if (!movie) return <div className="p-10 text-white">Loading...</div>;
+
+  const handlePlay = () => {
+    setShowPlayer(true);
+    addRecentlyViewed({
+        id: movie.id,
+        title: movie.title,
+        poster_path: movie.poster_path,
+    });
+  };
 
   const isInWatchlist = watchlist.some((m) => m.id === movie.id);
 

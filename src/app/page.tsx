@@ -1,6 +1,10 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import { tmdbClient } from '@/lib/api/tmdbClient';
 import { MovieCard } from '@/components/MovieCard';
 import { Movie } from '@/types/movie';
+import Link from 'next/link';
 
 interface Category {
   title: string;
@@ -13,39 +17,60 @@ const categories: Category[] = [
   { title: 'Top Rated', endpoint: '/movie/top_rated' },
 ];
 
-async function getMovies(endpoint: string): Promise<Movie[]> {
-  const { data } = await tmdbClient.get<{ results: Movie[] }>(endpoint);
-  return data.results;
-}
+export default function HomePage() {
+  const [trending, setTrending] = useState<Movie[]>([]);
+  const [featuredIndex, setFeaturedIndex] = useState(0);
+  const [categoryData, setCategoryData] = useState<any[]>([]);
 
-export default async function HomePage() {
-  const trendingMovies = await getMovies('/trending/movie/week');
-  const featuredMovie = trendingMovies[0];
+  useEffect(() => {
+    const fetchData = async () => {
+      // Fetch Trending for Hero
+      const { data: trendingData } = await tmdbClient.get<{ results: Movie[] }>('/trending/movie/week');
+      setTrending(trendingData.results.slice(0, 5));
 
-  const categoryData = await Promise.all(
-    categories.map(async (cat) => ({
-      ...cat,
-      movies: await getMovies(cat.endpoint),
-    }))
-  );
+      // Fetch Categories
+      const cats = await Promise.all(
+        categories.map(async (cat) => {
+          const { data } = await tmdbClient.get<{ results: Movie[] }>(cat.endpoint);
+          return { ...cat, movies: data.results };
+        })
+      );
+      setCategoryData(cats);
+    };
+    fetchData();
+  }, []);
 
-  if (!featuredMovie) return null;
+  // Auto-slide hero every 3s
+  useEffect(() => {
+    if (trending.length === 0) return;
+    const interval = setInterval(() => {
+      setFeaturedIndex((prev) => (prev + 1) % trending.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [trending]);
+
+  const featuredMovie = trending[featuredIndex];
 
   return (
     <div className="relative min-h-screen">
       {/* Hero Banner */}
-      <div className="relative h-[60vh] md:h-[80vh] w-full">
-        <img
-          src={`https://image.tmdb.org/t/p/original${featuredMovie.backdrop_path}`}
-          alt={featuredMovie.title}
-          className="h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-black/40 to-transparent" />
-        <div className="absolute bottom-10 left-5 md:bottom-20 md:left-10 max-w-lg p-2">
-          <h1 className="text-4xl md:text-6xl font-bold text-white">{featuredMovie.title}</h1>
-          <p className="mt-2 text-sm md:text-lg text-gray-200 line-clamp-3">{featuredMovie.overview}</p>
+      {featuredMovie && (
+        <div className="relative h-[60vh] md:h-[80vh] w-full transition-opacity duration-500">
+          <img
+            src={`https://image.tmdb.org/t/p/original${featuredMovie.backdrop_path}`}
+            alt={featuredMovie.title}
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-black/40 to-transparent" />
+          <div className="absolute bottom-10 left-5 md:bottom-20 md:left-10 max-w-lg p-2">
+            <h1 className="text-4xl md:text-6xl font-bold text-white">{featuredMovie.title}</h1>
+            <p className="mt-2 text-sm md:text-lg text-gray-200 line-clamp-3">{featuredMovie.overview}</p>
+            <Link href={`/movie/${featuredMovie.id}`} className="mt-4 inline-block bg-[#E50914] text-white px-6 py-2 rounded-full font-bold">
+                Watch Now
+            </Link>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Categorized Rows */}
       <div className="pb-10">
@@ -55,7 +80,7 @@ export default async function HomePage() {
               {category.title}
             </h2>
             <div className="flex overflow-x-auto space-x-4 px-5 md:px-10 pb-4 scrollbar-hide">
-              {category.movies.map((movie) => (
+              {category.movies.map((movie: Movie) => (
                 <div key={movie.id} className="min-w-[150px] md:min-w-[200px]">
                   <MovieCard movie={movie} />
                 </div>

@@ -4,7 +4,7 @@ import { Movie } from '@/types/movie';
 
 interface SalidaState {
   watchlist: Movie[];
-  addToWatchlist: (movie: Movie) => void;
+  addToWatchlist: (movie: Partial<Movie> & { id: number; title: string }) => void;
   removeFromWatchlist: (movieId: number) => void;
   recentlyViewed: Movie[];
   addRecentlyViewed: (movie: Partial<Movie> & { id: number; title: string }) => void;
@@ -18,7 +18,10 @@ export const useSalidaStore = create<SalidaState>()(
       watchlist: [],
       addToWatchlist: (movie) =>
         set((state) => ({
-          watchlist: [...state.watchlist, movie],
+          watchlist: [
+            movie as Movie,
+            ...state.watchlist.filter((m) => m.id !== movie.id),
+          ],
         })),
       removeFromWatchlist: (movieId) =>
         set((state) => ({

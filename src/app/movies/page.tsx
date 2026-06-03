@@ -29,9 +29,10 @@ export default function MoviesPage() {
       <h1 className="text-4xl font-bold px-5 md:px-10 mb-4">Movies</h1>
       <FilterBar onFilterChange={setFilters} />
       <div className="p-5 md:p-10 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
-        {movies.map((movie) => (
-          <MovieCard key={movie.id} movie={movie} />
-        ))}
+        {movies.length > 0 
+          ? movies.map((movie) => <MovieCard key={movie.id} movie={movie} />)
+          : Array.from({ length: 12 }).map((_, i) => <MovieSkeleton key={i} />)
+        }
       </div>
     </div>
   );

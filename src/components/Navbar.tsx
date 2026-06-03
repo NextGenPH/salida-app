@@ -36,6 +36,7 @@ export const Navbar = () => {
         <div className="flex items-center space-x-4">
           <Link href="/search" className="hidden md:block text-white hover:text-gray-300">Search</Link>
           <Link href="/my-list" className="hidden md:block text-white hover:text-gray-300">My List</Link>
+          <Link href="/profile" className="hidden md:block text-white hover:text-gray-300">Profile</Link>
           <button className="md:hidden text-white" onClick={() => setIsMenuOpen(true)}>
             <Menu />
           </button>
@@ -56,6 +57,7 @@ export const Navbar = () => {
             <Link href="/movies" className="text-2xl text-white" onClick={() => setIsMenuOpen(false)}>Movies</Link>
             <Link href="/search" className="text-2xl text-white" onClick={() => setIsMenuOpen(false)}>Search</Link>
             <Link href="/my-list" className="text-2xl text-white" onClick={() => setIsMenuOpen(false)}>My List</Link>
+            <Link href="/profile" className="text-2xl text-white" onClick={() => setIsMenuOpen(false)}>Profile</Link>
           </div>
         </div>
       )}

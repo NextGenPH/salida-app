@@ -30,8 +30,11 @@ export default function MoviesPage() {
 
   return (
     <div className="pt-24 pb-10">
-      <h1 className="text-4xl font-bold px-5 md:px-10 mb-4">Movies</h1>
-      <FilterBar onFilterChange={setFilters} />
+      <div className="px-5 md:px-10 mb-8">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6">Browse Movies</h1>
+        <FilterBar onFilterChange={setFilters} />
+      </div>
+      
       <div className="p-5 md:p-10 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
         {movies.length > 0 
           ? movies.map((movie) => <MovieCard key={movie.id} movie={movie} />)

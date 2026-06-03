@@ -16,7 +16,8 @@ export const MovieCard = ({ movie, linkPrefix = '/movie' }: MovieCardProps) => {
           alt={movie.title}
           width={500}
           height={750}
-          className="rounded-md w-full transition-transform group-hover:scale-105"
+          loading="lazy"
+          className="rounded-md w-full aspect-[2/3] object-cover transition-transform group-hover:scale-105"
         />
       )}
       <h2 className="mt-2 text-sm font-medium text-white group-hover:text-red-500 truncate">

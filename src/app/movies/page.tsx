@@ -9,12 +9,14 @@ import { FilterBar } from '@/components/FilterBar';
 
 export default function MoviesPage() {
   const [movies, setMovies] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({ genre: '', country: '', year: '' });
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchMovies = async () => {
+      setLoading(true);
       const params: any = { page };
       if (filters.genre) params.with_genres = filters.genre;
       if (filters.country) params.with_origin_country = filters.country;
@@ -23,6 +25,7 @@ export default function MoviesPage() {
       const { data } = await tmdbClient.get<{ results: Movie[]; total_pages: number }>('/discover/movie', { params });
       setMovies(data.results);
       setTotalPages(data.total_pages);
+      setLoading(false);
     };
 
     fetchMovies();
@@ -32,13 +35,13 @@ export default function MoviesPage() {
     <div className="pt-24 pb-10">
       <div className="px-5 md:px-10 mb-8">
         <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6">Browse Movies</h1>
-        <FilterBar onFilterChange={setFilters} />
+        <FilterBar onFilterChange={(f) => { setFilters(f); setPage(1); }} />
       </div>
       
       <div className="p-5 md:p-10 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
-        {movies.length > 0 
-          ? movies.map((movie) => <MovieCard key={movie.id} movie={movie} />)
-          : Array.from({ length: 12 }).map((_, i) => <MovieSkeleton key={i} />)
+        {loading 
+          ? Array.from({ length: 12 }).map((_, i) => <MovieSkeleton key={i} />)
+          : movies.map((movie) => <MovieCard key={movie.id} movie={movie} />)
         }
       </div>
       

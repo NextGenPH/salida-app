@@ -8,6 +8,8 @@ interface SalidaState {
   removeFromWatchlist: (movieId: number) => void;
   updateContinueWatching: (movie: Partial<Movie> & { id: number; progress: number }) => void;
   continueWatching: Record<number, Partial<Movie> & { id: number; progress: number }>;
+  settings: { adultContent: boolean };
+  updateSettings: (settings: { adultContent: boolean }) => void;
 }
 
 export const useSalidaStore = create<SalidaState>()(
@@ -32,6 +34,11 @@ export const useSalidaStore = create<SalidaState>()(
             ...state.continueWatching,
             [movie.id]: movie,
           },
+        })),
+      settings: { adultContent: false },
+      updateSettings: (newSettings) =>
+        set((state) => ({
+          settings: { ...state.settings, ...newSettings },
         })),
     }),
     {

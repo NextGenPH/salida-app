@@ -13,7 +13,7 @@ export default function MovieDetailsPage() {
   const { watchlist, addToWatchlist, removeFromWatchlist, updateContinueWatching } = useSalidaStore();
   const [movie, setMovie] = useState<Movie | null>(null);
   const [showPlayer, setShowPlayer] = useState(false);
-  const [selectedServer, setSelectedServer] = useState<'vidsrc' | 'vidlink'>('vidlink');
+  const [selectedServer, setSelectedServer] = useState<'vidsrc' | 'vidlink' | 'videasy'>('vidlink');
   const [showTrailer, setShowTrailer] = useState(false);
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const [cast, setCast] = useState<any[]>([]);
@@ -181,12 +181,9 @@ const handlePlay = () => {
               Close
             </button>
             <div className="aspect-video w-full">
-              <div className="flex gap-4 text-white mb-4">
-                 <label className="flex items-center gap-2"><input type="radio" value="vidsrc" checked={selectedServer === 'vidsrc'} onChange={(e) => setSelectedServer(e.target.value as any)} /> Server 1 (Vidsrc)</label>
-                 <label className="flex items-center gap-2"><input type="radio" value="vidlink" checked={selectedServer === 'vidlink'} onChange={(e) => setSelectedServer(e.target.value as any)} /> Server 2 (Vidlink)</label>
-              </div>
+              <ServerSelector selected={selectedServer} onSelect={(s) => setSelectedServer(s as any)} />
               <iframe
-                src={selectedServer === 'vidsrc' ? `https://vidsrc.to/embed/movie/${id}` : `https://vidlink.pro/movie/${id}?primaryColor=E50914&autoplay=true&icons=vid&title=false`}
+                src={selectedServer === 'vidsrc' ? `https://vidsrc.to/embed/movie/${id}` : selectedServer === 'vidlink' ? `https://vidlink.pro/movie/${id}?primaryColor=E50914&autoplay=true&icons=vid&title=false` : `https://player.videasy.net/movie/${id}?autoplay=true`}
                 className="w-full h-full rounded-lg"
                 allowFullScreen
               />

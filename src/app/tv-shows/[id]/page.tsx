@@ -177,11 +177,7 @@ export default function TVShowDetailsPage() {
               Close
             </button>
             <div className="aspect-video w-full">
-              <div className="flex flex-wrap gap-4 text-white mb-4">
-                 <label className="flex items-center gap-2"><input type="radio" value="vidsrc" checked={selectedServer === 'vidsrc'} onChange={(e) => setSelectedServer(e.target.value as any)} /> Server 1 (Vidsrc)</label>
-                 <label className="flex items-center gap-2"><input type="radio" value="vidlink" checked={selectedServer === 'vidlink'} onChange={(e) => setSelectedServer(e.target.value as any)} /> Server 2 (Vidlink)</label>
-                 <label className="flex items-center gap-2"><input type="radio" value="videasy" checked={selectedServer === 'videasy'} onChange={(e) => setSelectedServer(e.target.value as any)} /> Server 3 (Videasy)</label>
-              </div>
+              <ServerSelector selected={selectedServer} onSelect={(s) => setSelectedServer(s as any)} />
               <div className="flex flex-wrap gap-4 text-white mb-4">
                 <select className="bg-gray-800 p-2 rounded" onChange={(e) => { setSelectedSeason(parseInt(e.target.value)); setSelectedEpisode(1); }}>
                     {seasons.map(s => <option key={s.season_number} value={s.season_number}>Season {s.season_number}</option>)}

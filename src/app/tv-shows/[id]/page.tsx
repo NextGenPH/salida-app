@@ -1,25 +1,3 @@
-      {/* Episodes */}
-      <div className="mt-10">
-        <h2 className="text-2xl font-bold mb-4">Episodes</h2>
-        <select className="bg-gray-800 p-2 rounded mb-4" onChange={(e) => { setSelectedSeason(parseInt(e.target.value)); }}>
-            {seasons.map(s => <option key={s.season_number} value={s.season_number}>Season {s.season_number}</option>)}
-        </select>
-        <div className="space-y-4">
-            {episodes.map(ep => (
-                <div key={ep.id} className="flex gap-4 bg-[#181818] p-3 rounded-lg items-center">
-                    {ep.still_path ? (
-                        <img src={`https://image.tmdb.org/t/p/w300${ep.still_path}`} alt={ep.name} className="w-32 h-18 rounded object-cover" />
-                    ) : (
-                        <div className="w-32 h-18 bg-gray-700 rounded flex items-center justify-center">No Image</div>
-                    )}
-                    <div>
-                        <h3 className="font-bold">{ep.episode_number}. {ep.name}</h3>
-                        <p className="text-sm text-gray-400 line-clamp-2">{ep.overview}</p>
-                    </div>
-                </div>
-            ))}
-        </div>
-      </div>
 'use client';
 
 import { tmdbClient } from '@/lib/api/tmdbClient';
@@ -155,6 +133,29 @@ export default function TVShowDetailsPage() {
               <p className="text-xs text-center text-gray-300 truncate w-full">{person.name}</p>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* Episodes */}
+      <div className="mt-10">
+        <h2 className="text-2xl font-bold mb-4">Episodes</h2>
+        <select className="bg-gray-800 p-2 rounded mb-4" onChange={(e) => { setSelectedSeason(parseInt(e.target.value)); setSelectedEpisode(1); }}>
+            {seasons.map(s => <option key={s.season_number} value={s.season_number}>Season {s.season_number}</option>)}
+        </select>
+        <div className="space-y-4">
+            {episodes.map(ep => (
+                <div key={ep.id} className="flex gap-4 bg-[#181818] p-3 rounded-lg items-center">
+                    {ep.still_path ? (
+                        <img src={`https://image.tmdb.org/t/p/w300${ep.still_path}`} alt={ep.name} className="w-32 h-18 rounded object-cover" />
+                    ) : (
+                        <div className="w-32 h-18 bg-gray-700 rounded flex items-center justify-center">No Image</div>
+                    )}
+                    <div>
+                        <h3 className="font-bold">{ep.episode_number}. {ep.name}</h3>
+                        <p className="text-sm text-gray-400 line-clamp-2">{ep.overview}</p>
+                    </div>
+                </div>
+            ))}
         </div>
       </div>
 

@@ -159,7 +159,7 @@ export default function TVShowDetailsPage() {
                 </select>
               </div>
               <iframe
-                src={selectedServer === 'vidsrc' ? `https://vidsrc.to/embed/tv/${id}/${selectedSeason}/${selectedEpisode}` : `https://vidlink.pro/tv/${id}/${selectedSeason}/${selectedEpisode}?primaryColor=E50914&autoplay=true`}
+                src={selectedServer === 'vidsrc' ? `https://vidsrc.to/embed/tv/${id}/${selectedSeason}/${selectedEpisode}` : `https://vidlink.pro/tv/${id}/${selectedSeason}/${selectedEpisode}?primaryColor=E50914&autoplay=true&icons=vid&title=false&nextbutton=true`}
                 className="w-full h-full rounded-lg"
                 allowFullScreen
               />

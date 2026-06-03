@@ -185,7 +185,7 @@ const handlePlay = () => {
                  <label className="flex items-center gap-2"><input type="radio" value="vidlink" checked={selectedServer === 'vidlink'} onChange={(e) => setSelectedServer(e.target.value as any)} /> Server 2 (Vidlink)</label>
               </div>
               <iframe
-                src={selectedServer === 'vidsrc' ? `https://vidsrc.to/embed/movie/${id}` : `https://vidlink.pro/movie/${id}?primaryColor=E50914&autoplay=true`}
+                src={selectedServer === 'vidsrc' ? `https://vidsrc.to/embed/movie/${id}` : `https://vidlink.pro/movie/${id}?primaryColor=E50914&autoplay=true&icons=vid&title=false`}
                 className="w-full h-full rounded-lg"
                 allowFullScreen
               />

@@ -18,6 +18,8 @@ export default function TVShowDetailsPage() {
   };
   const [show, setShow] = useState<TVShow | null>(null);
   const [showPlayer, setShowPlayer] = useState(false);
+  const [showTrailer, setShowTrailer] = useState(false);
+  const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const [selectedServer, setSelectedServer] = useState<'vidsrc' | 'vidlink' | 'videasy'>('vidlink');
   const [cast, setCast] = useState<any[]>([]);
   const [episodes, setEpisodes] = useState<any[]>([]);
@@ -30,6 +32,12 @@ export default function TVShowDetailsPage() {
       tmdbClient.get<TVShow>(`/tv/${id}`).then((res) => {
         setShow(res.data);
         setSeasons(res.data.seasons || []);
+      });
+      tmdbClient.get(`/tv/${id}/videos`).then((res) => {
+        const trailer = res.data.results.find(
+          (v: any) => v.site === 'YouTube' && v.type === 'Trailer'
+        );
+        if (trailer) setTrailerKey(trailer.key);
       });
       tmdbClient.get(`/tv/${id}/credits`).then((res) => setCast(res.data.cast.slice(0, 10)));
     }
@@ -79,6 +87,14 @@ export default function TVShowDetailsPage() {
               >
                 Play
               </button>
+              {trailerKey && (
+                <button
+                  onClick={() => setShowTrailer(true)}
+                  className="bg-gray-600/70 px-8 py-3 rounded-full font-bold text-white hover:bg-gray-600 transition"
+                >
+                  Watch Trailer
+                </button>
+              )}
               <button
                 onClick={toggleWatchlist}
                 className={`px-6 py-2 md:px-8 md:py-3 rounded-full font-bold text-white transition ${
@@ -108,7 +124,7 @@ export default function TVShowDetailsPage() {
               <img
                 src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
                 alt={show.name}
-                className="rounded-lg w-full"
+                className="rounded-lg w-full max-w-[300px] shadow-2xl"
               />
           )}
         </div>
@@ -193,6 +209,27 @@ export default function TVShowDetailsPage() {
               </div>
               <iframe
                 src={selectedServer === 'vidsrc' ? `https://vidsrc.to/embed/tv/${id}/${selectedSeason}/${selectedEpisode}` : selectedServer === 'vidlink' ? `https://vidlink.pro/tv/${id}/${selectedSeason}/${selectedEpisode}?primaryColor=E50914&autoplay=true&icons=vid&title=false&nextbutton=true` : `https://player.videasy.net/tv/${id}/${selectedSeason}/${selectedEpisode}?autoplay=true`}
+                className="w-full h-full rounded-lg"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Trailer Modal */}
+      {showTrailer && trailerKey && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-2 md:p-10">
+          <div className="relative w-full max-w-4xl">
+            <button
+              onClick={() => setShowTrailer(false)}
+              className="absolute -top-10 right-0 text-white font-bold"
+            >
+              Close
+            </button>
+            <div className="aspect-video w-full">
+              <iframe
+                src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1`}
                 className="w-full h-full rounded-lg"
                 allowFullScreen
               />

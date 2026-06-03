@@ -4,7 +4,7 @@ import { Movie } from '@/types/movie';
 
 interface SalidaState {
   watchlist: Movie[];
-  addToWatchlist: (movie: Movie) => void;
+  addToWatchlist: (movie: Partial<Movie> & { id: number; title: string }) => void;
   removeFromWatchlist: (movieId: number) => void;
   updateContinueWatching: (movie: Partial<Movie> & { id: number; progress: number }) => void;
   continueWatching: Record<number, Partial<Movie> & { id: number; progress: number }>;

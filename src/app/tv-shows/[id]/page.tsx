@@ -9,7 +9,16 @@ import { useSalidaStore } from '@/store/useSalidaStore';
 export default function TVShowDetailsPage() {
   const params = useParams();
   const id = params?.id as string;
-  const { watchlist, addToWatchlist, removeFromWatchlist } = useSalidaStore();
+  const { watchlist, addToWatchlist, removeFromWatchlist, addRecentlyViewed } = useSalidaStore();
+
+  const handlePlay = () => {
+    setShowPlayer(true);
+    addRecentlyViewed({
+        id: show.id,
+        title: show.name,
+        poster_path: show.poster_path,
+    });
+  };
   const [show, setShow] = useState<TVShow | null>(null);
   const [showPlayer, setShowPlayer] = useState(false);
   const [selectedServer, setSelectedServer] = useState<'vidsrc' | 'vidlink'>('vidsrc');
@@ -53,7 +62,7 @@ export default function TVShowDetailsPage() {
             {/* Primary Action Buttons */}
             <div className="flex flex-wrap gap-2">
               <button
-                onClick={() => setShowPlayer(true)}
+                onClick={handlePlay}
                 className="bg-[#E50914] px-6 py-2 md:px-8 md:py-3 rounded-full font-bold text-white hover:bg-red-700 transition"
               >
                 Play

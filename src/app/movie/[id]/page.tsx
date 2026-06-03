@@ -9,7 +9,16 @@ import { useSalidaStore } from '@/store/useSalidaStore';
 export default function MovieDetailsPage() {
   const params = useParams();
   const id = params?.id as string;
-  const { watchlist, addToWatchlist, removeFromWatchlist } = useSalidaStore();
+  const { watchlist, addToWatchlist, removeFromWatchlist, addRecentlyViewed } = useSalidaStore();
+
+  const handlePlay = () => {
+      setShowPlayer(true);
+      addRecentlyViewed({
+          id: movie.id,
+          title: movie.title,
+          poster_path: movie.poster_path,
+      });
+  };
   const [movie, setMovie] = useState<Movie | null>(null);
   const [showPlayer, setShowPlayer] = useState(false);
   const [selectedServer, setSelectedServer] = useState<'vidsrc' | 'vidlink'>('vidsrc');
@@ -62,7 +71,7 @@ export default function MovieDetailsPage() {
           <p className="mt-2 text-base md:text-xl text-gray-200 drop-shadow-md">{movie.tagline}</p>
           <div className="mt-6 flex flex-wrap gap-3">
             <button
-              onClick={() => setShowPlayer(true)}
+              onClick={handlePlay}
               className="bg-white px-8 py-3 rounded font-bold text-black hover:bg-gray-200 transition flex items-center gap-2"
             >
               Play

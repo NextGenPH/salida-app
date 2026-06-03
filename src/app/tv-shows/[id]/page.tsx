@@ -144,7 +144,14 @@ export default function TVShowDetailsPage() {
         </select>
         <div className="space-y-4">
             {episodes.map(ep => (
-                <div key={ep.id} className="flex gap-4 bg-[#181818] p-3 rounded-lg items-center">
+                <div 
+                    key={ep.id} 
+                    className="flex gap-4 bg-[#181818] p-3 rounded-lg items-center cursor-pointer hover:bg-[#252525] transition"
+                    onClick={() => {
+                        setSelectedEpisode(ep.episode_number);
+                        setShowPlayer(true);
+                    }}
+                >
                     {ep.still_path ? (
                         <img src={`https://image.tmdb.org/t/p/w300${ep.still_path}`} alt={ep.name} className="w-32 h-18 rounded object-cover" />
                     ) : (

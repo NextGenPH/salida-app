@@ -5,7 +5,7 @@ export const Footer = () => {
       <div className="mt-2 space-x-2">
         <a href="/terms" className="text-gray-400 hover:text-white underline">Terms & Policy</a>
         <span>|</span>
-        <a href="https://nextgenph.site" className="text-red-500 hover:text-red-400 font-semibold" target="_blank" rel="noopener noreferrer">Developed by nextgenph.site</a>
+        <a href="https://nextgenph.site" className="text-red-500 hover:text-red-400 font-semibold" target="_blank" rel="noopener noreferrer">Powered by nextgenph.site</a>
       </div>
     </footer>
   );

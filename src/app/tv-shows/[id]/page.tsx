@@ -186,7 +186,11 @@ export default function TVShowDetailsPage() {
                 <select className="bg-gray-800 p-2 rounded" onChange={(e) => { setSelectedSeason(parseInt(e.target.value)); setSelectedEpisode(1); }}>
                     {seasons.map(s => <option key={s.season_number} value={s.season_number}>Season {s.season_number}</option>)}
                 </select>
-                <select className="bg-gray-800 p-2 rounded" onChange={(e) => setSelectedEpisode(parseInt(e.target.value))}>
+                <select 
+                    className="bg-gray-800 p-2 rounded" 
+                    value={selectedEpisode} 
+                    onChange={(e) => setSelectedEpisode(parseInt(e.target.value))}
+                >
                     {episodes.map(e => <option key={e.episode_number} value={e.episode_number}>Episode {e.episode_number}</option>)}
                 </select>
               </div>

@@ -18,13 +18,28 @@ export default function TVShowDetailsPage() {
   const [showPlayer, setShowPlayer] = useState(false);
   const [selectedServer, setSelectedServer] = useState<'vidsrc' | 'vidlink'>('vidlink');
   const [cast, setCast] = useState<any[]>([]);
+  const [seasons, setSeasons] = useState<any[]>([]);
+  const [selectedSeason, setSelectedSeason] = useState(1);
+  const [selectedEpisode, setSelectedEpisode] = useState(1);
+  const [episodesCount, setEpisodesCount] = useState(1);
 
   useEffect(() => {
     if (id) {
-      tmdbClient.get<TVShow>(`/tv/${id}`).then((res) => setShow(res.data));
+      tmdbClient.get<TVShow>(`/tv/${id}`).then((res) => {
+        setShow(res.data);
+        setSeasons(res.data.seasons || []);
+      });
       tmdbClient.get(`/tv/${id}/credits`).then((res) => setCast(res.data.cast.slice(0, 10)));
     }
   }, [id]);
+
+  useEffect(() => {
+    if (show && id) {
+        tmdbClient.get(`/tv/${id}/season/${selectedSeason}`).then(res => {
+            setEpisodesCount(res.data.episodes.length);
+        })
+    }
+  }, [id, selectedSeason, show]);
 
   if (!show) return <div className="p-10 text-white">Loading...</div>;
 
@@ -131,12 +146,20 @@ export default function TVShowDetailsPage() {
               Close
             </button>
             <div className="aspect-video w-full">
-              <div className="flex gap-4 text-white mb-4">
+              <div className="flex flex-wrap gap-4 text-white mb-4">
                  <label className="flex items-center gap-2"><input type="radio" value="vidsrc" checked={selectedServer === 'vidsrc'} onChange={(e) => setSelectedServer(e.target.value as any)} /> Server 1 (Vidsrc)</label>
                  <label className="flex items-center gap-2"><input type="radio" value="vidlink" checked={selectedServer === 'vidlink'} onChange={(e) => setSelectedServer(e.target.value as any)} /> Server 2 (Vidlink)</label>
               </div>
+              <div className="flex flex-wrap gap-4 text-white mb-4">
+                <select className="bg-gray-800 p-2 rounded" onChange={(e) => { setSelectedSeason(parseInt(e.target.value)); setSelectedEpisode(1); }}>
+                    {seasons.map(s => <option key={s.season_number} value={s.season_number}>Season {s.season_number}</option>)}
+                </select>
+                <select className="bg-gray-800 p-2 rounded" onChange={(e) => setSelectedEpisode(parseInt(e.target.value))}>
+                    {Array.from({length: episodesCount}, (_, i) => i + 1).map(e => <option key={e} value={e}>Episode {e}</option>)}
+                </select>
+              </div>
               <iframe
-                src={selectedServer === 'vidsrc' ? `https://vidsrc.to/embed/tv/${id}/1/1` : `https://vidlink.pro/tv/${id}/1/1?primaryColor=E50914&autoplay=true`}
+                src={selectedServer === 'vidsrc' ? `https://vidsrc.to/embed/tv/${id}/${selectedSeason}/${selectedEpisode}` : `https://vidlink.pro/tv/${id}/${selectedSeason}/${selectedEpisode}?primaryColor=E50914&autoplay=true`}
                 className="w-full h-full rounded-lg"
                 allowFullScreen
               />

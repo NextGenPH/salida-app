@@ -1,3 +1,25 @@
+      {/* Episodes */}
+      <div className="mt-10">
+        <h2 className="text-2xl font-bold mb-4">Episodes</h2>
+        <select className="bg-gray-800 p-2 rounded mb-4" onChange={(e) => { setSelectedSeason(parseInt(e.target.value)); }}>
+            {seasons.map(s => <option key={s.season_number} value={s.season_number}>Season {s.season_number}</option>)}
+        </select>
+        <div className="space-y-4">
+            {episodes.map(ep => (
+                <div key={ep.id} className="flex gap-4 bg-[#181818] p-3 rounded-lg items-center">
+                    {ep.still_path ? (
+                        <img src={`https://image.tmdb.org/t/p/w300${ep.still_path}`} alt={ep.name} className="w-32 h-18 rounded object-cover" />
+                    ) : (
+                        <div className="w-32 h-18 bg-gray-700 rounded flex items-center justify-center">No Image</div>
+                    )}
+                    <div>
+                        <h3 className="font-bold">{ep.episode_number}. {ep.name}</h3>
+                        <p className="text-sm text-gray-400 line-clamp-2">{ep.overview}</p>
+                    </div>
+                </div>
+            ))}
+        </div>
+      </div>
 'use client';
 
 import { tmdbClient } from '@/lib/api/tmdbClient';
@@ -19,10 +41,10 @@ export default function TVShowDetailsPage() {
   const [showPlayer, setShowPlayer] = useState(false);
   const [selectedServer, setSelectedServer] = useState<'vidsrc' | 'vidlink' | 'videasy'>('vidlink');
   const [cast, setCast] = useState<any[]>([]);
+  const [episodes, setEpisodes] = useState<any[]>([]);
   const [seasons, setSeasons] = useState<any[]>([]);
   const [selectedSeason, setSelectedSeason] = useState(1);
   const [selectedEpisode, setSelectedEpisode] = useState(1);
-  const [episodesCount, setEpisodesCount] = useState(1);
 
   useEffect(() => {
     if (id) {
@@ -37,7 +59,7 @@ export default function TVShowDetailsPage() {
   useEffect(() => {
     if (show && id) {
         tmdbClient.get(`/tv/${id}/season/${selectedSeason}`).then(res => {
-            setEpisodesCount(res.data.episodes.length);
+            setEpisodes(res.data.episodes);
         })
     }
   }, [id, selectedSeason, show]);
@@ -157,7 +179,7 @@ export default function TVShowDetailsPage() {
                     {seasons.map(s => <option key={s.season_number} value={s.season_number}>Season {s.season_number}</option>)}
                 </select>
                 <select className="bg-gray-800 p-2 rounded" onChange={(e) => setSelectedEpisode(parseInt(e.target.value))}>
-                    {Array.from({length: episodesCount}, (_, i) => i + 1).map(e => <option key={e} value={e}>Episode {e}</option>)}
+                    {episodes.map(e => <option key={e.episode_number} value={e.episode_number}>Episode {e.episode_number}</option>)}
                 </select>
               </div>
               <iframe

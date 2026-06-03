@@ -13,6 +13,8 @@ interface SalidaState {
   removeFromWatchlist: (movieId: number) => void;
   recentlyViewed: Movie[];
   addRecentlyViewed: (movie: Movie) => void;
+  updateContinueWatching: (movie: Movie & { progress: number }) => void;
+  continueWatching: Record<number, Movie & { progress: number }>;
 }
 
 export const useSalidaStore = create<SalidaState>()(
@@ -34,6 +36,14 @@ export const useSalidaStore = create<SalidaState>()(
             movie,
             ...state.recentlyViewed.filter((m) => m.id !== movie.id),
           ].slice(0, 10),
+        })),
+      continueWatching: {},
+      updateContinueWatching: (movie) =>
+        set((state) => ({
+          continueWatching: {
+            ...state.continueWatching,
+            [movie.id]: movie,
+          },
         })),
     }),
     {

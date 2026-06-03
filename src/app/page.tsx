@@ -19,7 +19,7 @@ const categories: Category[] = [
 ];
 
 export default function HomePage() {
-  const { recentlyViewed } = useSalidaStore();
+  const { recentlyViewed, continueWatching } = useSalidaStore();
   const [trending, setTrending] = useState<Movie[]>([]);
   const [featuredIndex, setFeaturedIndex] = useState(0);
   const [categoryData, setCategoryData] = useState<any[]>([]);
@@ -76,6 +76,23 @@ export default function HomePage() {
 
       {/* Categorized Rows */}
       <div className="pb-10">
+        {Object.values(continueWatching).length > 0 && (
+          <section className="mb-8">
+            <h2 className="text-xl md:text-2xl font-semibold px-5 md:px-10 mb-4 text-gray-200">
+              Continue Watching
+            </h2>
+            <div className="flex overflow-x-auto space-x-4 px-5 md:px-10 pb-4 scrollbar-hide">
+              {Object.values(continueWatching).map((movie: any) => (
+                <div key={movie.id} className="min-w-[150px] md:min-w-[200px]">
+                  <MovieCard movie={movie} />
+                  <div className="w-full bg-gray-700 h-1 mt-2">
+                    <div className="bg-red-600 h-1" style={{ width: `${movie.progress}%` }}></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
         {recentlyViewed.length > 0 && (
           <section className="mb-8">
             <h2 className="text-xl md:text-2xl font-semibold px-5 md:px-10 mb-4 text-gray-200">

@@ -9,16 +9,30 @@ import { useSalidaStore } from '@/store/useSalidaStore';
 export default function MovieDetailsPage() {
   const params = useParams();
   const id = params?.id as string;
-  const { watchlist, addToWatchlist, removeFromWatchlist, addRecentlyViewed } = useSalidaStore();
+  const { watchlist, addToWatchlist, removeFromWatchlist, addRecentlyViewed, updateContinueWatching } = useSalidaStore();
 
-  const handlePlay = () => {
-      setShowPlayer(true);
-      addRecentlyViewed({
-          id: movie.id,
-          title: movie.title,
-          poster_path: movie.poster_path,
-      });
-  };
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.origin !== 'https://vidlink.pro') return;
+      if (event.data?.type === 'MEDIA_DATA') {
+        const data = event.data.data;
+        // Basic check for movie vs tv to normalize data
+        const movieId = parseInt(Object.keys(data)[0]);
+        const media = data[movieId];
+        
+        if (media) {
+            updateContinueWatching({
+                id: movieId,
+                title: media.title,
+                poster_path: media.poster_path,
+                progress: (media.progress.watched / media.progress.duration) * 100
+            });
+        }
+      }
+    };
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, [updateContinueWatching]);
   const [movie, setMovie] = useState<Movie | null>(null);
   const [showPlayer, setShowPlayer] = useState(false);
   const [selectedServer, setSelectedServer] = useState<'vidsrc' | 'vidlink'>('vidsrc');

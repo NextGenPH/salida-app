@@ -7,6 +7,7 @@ export const PWAGuard = ({ children }: { children: React.ReactNode }) => {
   const [isStandalone, setIsStandalone] = useState<boolean | null>(null);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isIOS, setIsIOS] = useState(false);
+  const [isBrave, setIsBrave] = useState(false);
 
   useEffect(() => {
     // Register Service Worker
@@ -22,6 +23,13 @@ export const PWAGuard = ({ children }: { children: React.ReactNode }) => {
         );
       });
     }
+
+    // Detect Brave
+    const detectBrave = async () => {
+      const isBraveBrowser = !!(navigator as any).brave && await (navigator as any).brave.isBrave();
+      setIsBrave(isBraveBrowser);
+    };
+    detectBrave();
 
     // Check if running in standalone mode
     const checkStandalone = () => {
@@ -72,41 +80,64 @@ export const PWAGuard = ({ children }: { children: React.ReactNode }) => {
 
   // Landing page for forcing installation
   return (
-    <div className="fixed inset-0 z-[9999] bg-[#141414] flex flex-col items-center justify-center p-6 text-center">
+    <div className="fixed inset-0 z-[9999] bg-[#141414] flex flex-col items-center justify-center p-6 text-center overflow-y-auto">
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-md w-full"
+        className="max-w-md w-full py-10"
       >
         <h1 className="text-6xl font-black text-[#E50914] mb-8 tracking-tighter">SALIDA</h1>
         
         <div className="space-y-6">
           <h2 className="text-2xl md:text-3xl font-bold text-white">
-            Install the App to Start Watching
+            {isBrave ? 'Ready to Install SALIDA?' : 'Unlock the Premium Experience'}
           </h2>
           <p className="text-gray-400 text-lg">
-            Experience premium streaming with our official app. Fast, secure, and better performance.
+            {isBrave 
+              ? 'You are using Brave! Install the app now for the best ad-free streaming experience.' 
+              : 'For a Premium Feel & Ad-Free experience, we strongly recommend using Brave Browser.'}
           </p>
 
-          <div className="bg-white/5 p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
+          {!isBrave && !isIOS && (
+            <div className="space-y-4">
+              <a 
+                href="https://brave.com/download/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-full flex items-center justify-center gap-3 bg-[#ff5e00] text-white py-4 rounded-xl font-black text-lg shadow-xl shadow-[#ff5e00]/20 transition-all transform active:scale-95"
+              >
+                <img 
+                  src="https://brave.com/static-assets/images/brave-logo-sans-text.svg" 
+                  alt="Brave" 
+                  className="w-6 h-6 brightness-0 invert"
+                />
+                GET BRAVE BROWSER
+              </a>
+              <p className="text-gray-500 text-xs">
+                Open this site in Brave to enable the premium app installation.
+              </p>
+            </div>
+          )}
+
+          <div className={`bg-white/5 p-6 rounded-2xl border border-white/10 backdrop-blur-sm ${!isBrave && !isIOS ? 'opacity-50 grayscale pointer-events-none' : ''}`}>
             {isIOS ? (
               <div className="space-y-4 text-left">
-                <p className="font-semibold text-white flex items-center gap-2">
-                  <span className="bg-white/10 w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span>
+                <p className="font-semibold text-white text-sm flex items-center gap-2">
+                  <span className="bg-white/10 w-5 h-5 rounded-full flex items-center justify-center text-[10px]">1</span>
                   Tap the share button below
                 </p>
-                <p className="font-semibold text-white flex items-center gap-2">
-                  <span className="bg-white/10 w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span>
+                <p className="font-semibold text-white text-sm flex items-center gap-2">
+                  <span className="bg-white/10 w-5 h-5 rounded-full flex items-center justify-center text-[10px]">2</span>
                   Select "Add to Home Screen"
                 </p>
-                <div className="pt-4 flex justify-center">
-                  <svg className="w-8 h-8 text-blue-500 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="pt-2 flex justify-center">
+                  <svg className="w-6 h-6 text-blue-500 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                   </svg>
                 </div>
               </div>
             ) : (
-              <div className="space-y-6">
+              <div className="space-y-4">
                 <button
                   onClick={handleInstall}
                   disabled={!deferredPrompt}
@@ -116,38 +147,15 @@ export const PWAGuard = ({ children }: { children: React.ReactNode }) => {
                       : 'bg-gray-700 text-gray-400 cursor-not-allowed'
                   }`}
                 >
-                  {deferredPrompt ? 'INSTALL APP NOW' : 'TAP BROWSER MENU TO INSTALL'}
+                  {deferredPrompt ? 'INSTALL APP NOW' : 'BROWSER READY...'}
                 </button>
-                {!deferredPrompt && (
-                  <p className="text-xs text-gray-500">
-                    If the button is disabled, tap your browser's menu (⋮) and select "Install app" or "Add to Home screen".
+                {isBrave && !deferredPrompt && (
+                  <p className="text-xs text-gray-400">
+                    Brave users: If the button is disabled, tap the <span className="font-bold text-white">Install icon</span> in your address bar or menu.
                   </p>
                 )}
               </div>
             )}
-          </div>
-
-          {/* Brave Recommendation */}
-          <div className="mt-8 pt-6 border-t border-white/10">
-            <p className="text-gray-400 text-sm mb-4">
-              For a <span className="text-white font-bold">Premium Feel</span> & Ad-Free experience, we recommend using:
-            </p>
-            <a 
-              href="https://brave.com/download/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 bg-[#ff5e00]/10 hover:bg-[#ff5e00]/20 border border-[#ff5e00]/30 px-6 py-3 rounded-full transition-all group"
-            >
-              <img 
-                src="https://brave.com/static-assets/images/brave-logo-sans-text.svg" 
-                alt="Brave" 
-                className="w-6 h-6"
-              />
-              <span className="text-[#ff5e00] font-bold">Brave Browser</span>
-              <svg className="w-4 h-4 text-[#ff5e00] group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
-            </a>
           </div>
 
           <p className="text-gray-500 text-sm italic">

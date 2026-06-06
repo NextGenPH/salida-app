@@ -113,6 +113,29 @@ export const PWAGuard = ({ children }: { children: React.ReactNode }) => {
             )}
           </div>
 
+          {/* Brave Recommendation */}
+          <div className="mt-8 pt-6 border-t border-white/10">
+            <p className="text-gray-400 text-sm mb-4">
+              For a <span className="text-white font-bold">Premium Feel</span> & Ad-Free experience, we recommend using:
+            </p>
+            <a 
+              href="https://brave.com/download/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 bg-[#ff5e00]/10 hover:bg-[#ff5e00]/20 border border-[#ff5e00]/30 px-6 py-3 rounded-full transition-all group"
+            >
+              <img 
+                src="https://brave.com/static-assets/images/brave-logo-sans-text.svg" 
+                alt="Brave" 
+                className="w-6 h-6"
+              />
+              <span className="text-[#ff5e00] font-bold">Brave Browser</span>
+              <svg className="w-4 h-4 text-[#ff5e00] group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </a>
+          </div>
+
           <p className="text-gray-500 text-sm italic">
             Once installed, open SALIDA from your home screen.
           </p>

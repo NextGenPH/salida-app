@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { tmdbClient } from '@/lib/api/tmdbClient';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Spinner } from '@/components/Spinner';
 
 interface SearchResult {
   id: number;
@@ -62,7 +63,7 @@ export default function SearchPage() {
         className="w-full p-4 rounded-md bg-[#222] text-white mb-6"
       />
 
-      {loading && <p>Searching...</p>}
+      {loading && <Spinner />}
 
       <div className="space-y-4">
         {results.map((item) => (

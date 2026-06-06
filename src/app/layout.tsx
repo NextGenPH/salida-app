@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { InstallPrompt } from "@/components/InstallPrompt";
+import { PWAGuard } from "@/components/PWAGuard";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,12 +36,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#141414] text-white`}
       >
-        <Navbar />
-        <main className="pt-20 min-h-screen">
-          {children}
-        </main>
-        <Footer />
-        <InstallPrompt />
+        <PWAGuard>
+          <Navbar />
+          <main className="pt-20 min-h-screen">
+            {children}
+          </main>
+          <Footer />
+        </PWAGuard>
       </body>
     </html>
   );

@@ -76,35 +76,35 @@ const handlePlay = () => {
   };
 
   return (
-    <div className="p-5 md:p-10">
-      <div className="relative h-[40vh] md:h-[60vh] w-full rounded-2xl overflow-hidden mb-8">
+    <div className="pb-10">
+      <div className="relative h-[60vh] md:h-[85vh] w-full mb-8">
         <img
           src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
           alt={movie.title}
           className="h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-black/50 to-transparent" />
-        <div className="absolute bottom-5 left-5 md:bottom-12 md:left-12 max-w-2xl">
-          <h1 className="text-4xl md:text-6xl font-extrabold text-white drop-shadow-lg">{movie.title}</h1>
-          <p className="mt-2 text-base md:text-xl text-gray-200 drop-shadow-md">{movie.tagline}</p>
-          <div className="mt-6 flex flex-wrap gap-3">
+        <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-black/40 to-transparent" />
+        <div className="absolute bottom-10 left-5 md:bottom-20 md:left-20 max-w-3xl">
+          <h1 className="text-4xl md:text-7xl font-extrabold text-white drop-shadow-lg">{movie.title}</h1>
+          <p className="mt-4 text-base md:text-xl text-gray-200 drop-shadow-md">{movie.tagline}</p>
+          <div className="mt-8 flex flex-wrap gap-4">
             <button
               onClick={handlePlay}
-              className="bg-white px-8 py-3 rounded font-bold text-black hover:bg-gray-200 transition flex items-center gap-2"
+              className="bg-white px-10 py-4 rounded font-bold text-black hover:bg-gray-200 transition text-lg"
             >
               Play
             </button>
             {trailerKey && (
               <button
                 onClick={() => setShowTrailer(true)}
-                className="bg-gray-600/70 px-8 py-3 rounded font-bold text-white hover:bg-gray-600 transition flex items-center gap-2"
+                className="bg-gray-600/70 px-10 py-4 rounded font-bold text-white hover:bg-gray-600 transition text-lg"
               >
                 Watch Trailer
               </button>
             )}
             <button
               onClick={toggleWatchlist}
-              className={`px-8 py-3 rounded font-bold text-white transition ${
+              className={`px-10 py-4 rounded font-bold text-white transition text-lg ${
                 isInWatchlist ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-600/70 hover:bg-gray-600'
               }`}
             >
@@ -113,25 +113,24 @@ const handlePlay = () => {
           </div>
           
           {/* Metadata */}
-          <div className="flex flex-wrap items-center gap-3 mt-6 text-sm md:text-base text-gray-300">
-            <span className="font-bold text-green-500">{(movie.vote_average * 10).toFixed(0)}% Match</span>
+          <div className="flex flex-wrap items-center gap-6 mt-8 text-sm md:text-lg text-gray-300">
+            <span className="font-bold text-green-500 text-xl">{(movie.vote_average * 10).toFixed(0)}% Match</span>
             <span>{movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A'}</span>
-            {movie.runtime && <span className="border border-gray-500 px-1 rounded">{movie.runtime} min</span>}
+            {movie.runtime && <span className="border border-gray-500 px-2 py-0.5 rounded">{movie.runtime} min</span>}
           </div>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="grid md:grid-cols-3 gap-5 md:gap-10">
+      <div className="px-5 md:px-20 grid md:grid-cols-3 gap-10">
         <div className="md:col-span-2">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">Overview</h2>
-          <p className="text-sm md:text-lg text-gray-300">{movie.overview}</p>
+          <h2 className="text-3xl font-bold mb-6">Overview</h2>
+          <p className="text-lg text-gray-300 leading-relaxed">{movie.overview}</p>
         </div>
-        <div className="hidden md:block">
+        <div className="hidden md:flex justify-center">
           <img
             src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
             alt={movie.title}
-            className="rounded-lg w-full"
+            className="rounded-lg w-full max-w-[300px] shadow-2xl"
           />
         </div>
       </div>

@@ -3,55 +3,51 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+import { Spinner } from './Spinner';
+
 export const PWAGuard = ({ children }: { children: React.ReactNode }) => {
   const [isStandalone, setIsStandalone] = useState<boolean | null>(null);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isIOS, setIsIOS] = useState(false);
   const [isBrave, setIsBrave] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
+
     // Register Service Worker
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').then(
-          (registration) => {
-            console.log('SW registered: ', registration);
-          },
-          (registrationError) => {
-            console.log('SW registration failed: ', registrationError);
-          }
-        );
-      });
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(err => console.error('SW Error:', err));
     }
 
-    // Detect Brave
-    const detectBrave = async () => {
-      const isBraveBrowser = !!(navigator as any).brave && await (navigator as any).brave.isBrave();
-      setIsBrave(isBraveBrowser);
+    const init = async () => {
+      try {
+        // Detect Brave
+        if ((navigator as any).brave && typeof (navigator as any).brave.isBrave === 'function') {
+          const isBraveBrowser = await (navigator as any).brave.isBrave();
+          setIsBrave(!!isBraveBrowser);
+        }
+
+        // Detect iOS
+        const userAgent = window.navigator.userAgent.toLowerCase();
+        setIsIOS(/iphone|ipad|ipod/.test(userAgent));
+
+        // Check standalone mode
+        const isStandaloneMode = 
+          window.matchMedia('(display-mode: standalone)').matches || 
+          (window.navigator as any).standalone || 
+          document.referrer.includes('android-app://') ||
+          window.location.hostname === 'localhost';
+        
+        setIsStandalone(isStandaloneMode);
+      } catch (error) {
+        console.error('Detection error:', error);
+        setIsStandalone(false); // Default to gate if check fails
+      }
     };
-    detectBrave();
 
-    // Check if running in standalone mode
-    const checkStandalone = () => {
-      const isDev = window.location.hostname === 'localhost';
-      const isStandaloneMode = 
-        window.matchMedia('(display-mode: standalone)').matches || 
-        (window.navigator as any).standalone || 
-        document.referrer.includes('android-app://');
-      
-      setIsStandalone(isDev || isStandaloneMode);
-    };
+    init();
 
-    checkStandalone();
-
-    // Detect iOS
-    const detectIOS = () => {
-      const userAgent = window.navigator.userAgent.toLowerCase();
-      setIsIOS(/iphone|ipad|ipod/.test(userAgent));
-    };
-    detectIOS();
-
-    // Listen for beforeinstallprompt
     const handler = (e: any) => {
       e.preventDefault();
       setDeferredPrompt(e);
@@ -64,16 +60,19 @@ export const PWAGuard = ({ children }: { children: React.ReactNode }) => {
   const handleInstall = async () => {
     if (deferredPrompt) {
       deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === 'accepted') {
-        // standalone mode check will likely trigger on reload/re-entry
-      }
+      await deferredPrompt.userChoice;
       setDeferredPrompt(null);
     }
   };
 
-  // While checking, show nothing or a loader
-  if (isStandalone === null) return null;
+  // Prevent hydration mismatch and white screen
+  if (!isMounted || isStandalone === null) {
+    return (
+      <div className="fixed inset-0 bg-[#141414] flex items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
 
   // If already installed, render the app
   if (isStandalone) return <>{children}</>;

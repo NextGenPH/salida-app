@@ -98,65 +98,67 @@ export const PWAGuard = ({ children }: { children: React.ReactNode }) => {
               : 'For a Premium Feel & Ad-Free experience, we strongly recommend using Brave Browser.'}
           </p>
 
-          {!isBrave && !isIOS && (
-            <div className="space-y-4">
+          {!isBrave && !isIOS ? (
+            <div className="space-y-6">
               <a 
                 href="https://brave.com/download/" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="w-full flex items-center justify-center gap-3 bg-[#ff5e00] text-white py-4 rounded-xl font-black text-lg shadow-xl shadow-[#ff5e00]/20 transition-all transform active:scale-95"
+                className="w-full flex items-center justify-center gap-3 bg-[#ff5e00] text-white py-5 rounded-xl font-black text-xl shadow-xl shadow-[#ff5e00]/20 transition-all transform active:scale-95"
               >
                 <img 
                   src="https://brave.com/static-assets/images/brave-logo-sans-text.svg" 
                   alt="Brave" 
-                  className="w-6 h-6 brightness-0 invert"
+                  className="w-7 h-7 brightness-0 invert"
                 />
                 GET BRAVE BROWSER
               </a>
-              <p className="text-gray-500 text-xs">
-                Open this site in Brave to enable the premium app installation.
-              </p>
+              <div className="bg-white/5 p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
+                <p className="text-gray-400 text-sm">
+                  To access SALIDA, you must use <span className="text-white font-bold">Brave Browser</span>. It provides the premium, ad-free experience required for our platform.
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className={`bg-white/5 p-6 rounded-2xl border border-white/10 backdrop-blur-sm`}>
+              {isIOS ? (
+                <div className="space-y-4 text-left">
+                  <p className="font-semibold text-white text-sm flex items-center gap-2">
+                    <span className="bg-white/10 w-5 h-5 rounded-full flex items-center justify-center text-[10px]">1</span>
+                    Tap the share button below
+                  </p>
+                  <p className="font-semibold text-white text-sm flex items-center gap-2">
+                    <span className="bg-white/10 w-5 h-5 rounded-full flex items-center justify-center text-[10px]">2</span>
+                    Select "Add to Home Screen"
+                  </p>
+                  <div className="pt-2 flex justify-center">
+                    <svg className="w-6 h-6 text-blue-500 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                    </svg>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <button
+                    onClick={handleInstall}
+                    disabled={!deferredPrompt}
+                    className={`w-full py-4 rounded-xl font-black text-lg transition-all transform active:scale-95 ${
+                      deferredPrompt 
+                        ? 'bg-[#E50914] text-white shadow-xl shadow-red-600/20' 
+                        : 'bg-gray-700 text-gray-400 cursor-not-allowed'
+                    }`}
+                  >
+                    {deferredPrompt ? 'INSTALL APP NOW' : 'PREPARING APP...'}
+                  </button>
+                  {!deferredPrompt && (
+                    <p className="text-xs text-gray-400">
+                      Tap the <span className="font-bold text-white">Install icon</span> in your address bar or menu to begin.
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
           )}
-
-          <div className={`bg-white/5 p-6 rounded-2xl border border-white/10 backdrop-blur-sm ${!isBrave && !isIOS ? 'opacity-50 grayscale pointer-events-none' : ''}`}>
-            {isIOS ? (
-              <div className="space-y-4 text-left">
-                <p className="font-semibold text-white text-sm flex items-center gap-2">
-                  <span className="bg-white/10 w-5 h-5 rounded-full flex items-center justify-center text-[10px]">1</span>
-                  Tap the share button below
-                </p>
-                <p className="font-semibold text-white text-sm flex items-center gap-2">
-                  <span className="bg-white/10 w-5 h-5 rounded-full flex items-center justify-center text-[10px]">2</span>
-                  Select "Add to Home Screen"
-                </p>
-                <div className="pt-2 flex justify-center">
-                  <svg className="w-6 h-6 text-blue-500 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                  </svg>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <button
-                  onClick={handleInstall}
-                  disabled={!deferredPrompt}
-                  className={`w-full py-4 rounded-xl font-black text-lg transition-all transform active:scale-95 ${
-                    deferredPrompt 
-                      ? 'bg-[#E50914] text-white shadow-xl shadow-red-600/20' 
-                      : 'bg-gray-700 text-gray-400 cursor-not-allowed'
-                  }`}
-                >
-                  {deferredPrompt ? 'INSTALL APP NOW' : 'BROWSER READY...'}
-                </button>
-                {isBrave && !deferredPrompt && (
-                  <p className="text-xs text-gray-400">
-                    Brave users: If the button is disabled, tap the <span className="font-bold text-white">Install icon</span> in your address bar or menu.
-                  </p>
-                )}
-              </div>
-            )}
-          </div>
 
           <p className="text-gray-500 text-sm italic">
             Once installed, open SALIDA from your home screen.

@@ -100,6 +100,23 @@ export const PWAGuard = ({ children }: { children: React.ReactNode }) => {
 
           {!isBrave && !isIOS ? (
             <div className="space-y-6">
+              <div className="text-left space-y-4 bg-white/5 p-6 rounded-2xl border border-white/10">
+                <h3 className="text-[#ff5e00] font-bold text-lg uppercase tracking-wider">Instructions:</h3>
+                <ul className="space-y-3 text-gray-300 text-sm">
+                  <li className="flex gap-3">
+                    <span className="bg-[#ff5e00]/20 text-[#ff5e00] w-6 h-6 rounded-full flex items-center justify-center shrink-0 font-bold">1</span>
+                    <span>Download and install <span className="text-white font-bold">Brave Browser</span> using the button below.</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="bg-[#ff5e00]/20 text-[#ff5e00] w-6 h-6 rounded-full flex items-center justify-center shrink-0 font-bold">2</span>
+                    <span>Open <span className="text-white font-bold">SALIDA</span> inside your new Brave Browser.</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="bg-[#ff5e00]/20 text-[#ff5e00] w-6 h-6 rounded-full flex items-center justify-center shrink-0 font-bold">3</span>
+                    <span>Follow the in-app prompts to install the premium player.</span>
+                  </li>
+                </ul>
+              </div>
               <a 
                 href="https://brave.com/download/" 
                 target="_blank" 
@@ -113,49 +130,54 @@ export const PWAGuard = ({ children }: { children: React.ReactNode }) => {
                 />
                 GET BRAVE BROWSER
               </a>
-              <div className="bg-white/5 p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
-                <p className="text-gray-400 text-sm">
-                  To access SALIDA, you must use <span className="text-white font-bold">Brave Browser</span>. It provides the premium, ad-free experience required for our platform.
-                </p>
-              </div>
             </div>
           ) : (
-            <div className={`bg-white/5 p-6 rounded-2xl border border-white/10 backdrop-blur-sm`}>
-              {isIOS ? (
-                <div className="space-y-4 text-left">
-                  <p className="font-semibold text-white text-sm flex items-center gap-2">
-                    <span className="bg-white/10 w-5 h-5 rounded-full flex items-center justify-center text-[10px]">1</span>
-                    Tap the share button below
-                  </p>
-                  <p className="font-semibold text-white text-sm flex items-center gap-2">
-                    <span className="bg-white/10 w-5 h-5 rounded-full flex items-center justify-center text-[10px]">2</span>
-                    Select "Add to Home Screen"
-                  </p>
-                  <div className="pt-2 flex justify-center">
-                    <svg className="w-6 h-6 text-blue-500 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                    </svg>
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  <button
-                    onClick={handleInstall}
-                    disabled={!deferredPrompt}
-                    className={`w-full py-4 rounded-xl font-black text-lg transition-all transform active:scale-95 ${
-                      deferredPrompt 
-                        ? 'bg-[#E50914] text-white shadow-xl shadow-red-600/20' 
-                        : 'bg-gray-700 text-gray-400 cursor-not-allowed'
-                    }`}
-                  >
-                    {deferredPrompt ? 'INSTALL APP NOW' : 'PREPARING APP...'}
-                  </button>
-                  {!deferredPrompt && (
-                    <p className="text-xs text-gray-400">
-                      Tap the <span className="font-bold text-white">Install icon</span> in your address bar or menu to begin.
-                    </p>
-                  )}
-                </div>
+            <div className={`space-y-6`}>
+              <div className="text-left space-y-4 bg-white/5 p-6 rounded-2xl border border-white/10">
+                <h3 className="text-[#E50914] font-bold text-lg uppercase tracking-wider">How to Install:</h3>
+                {isIOS ? (
+                  <ul className="space-y-4 text-gray-300">
+                    <li className="flex gap-3 items-center">
+                      <span className="bg-[#E50914]/20 text-[#E50914] w-6 h-6 rounded-full flex items-center justify-center shrink-0 font-bold text-xs">1</span>
+                      <span>Tap the <span className="text-white font-bold">Share button</span> (square with arrow) at the bottom.</span>
+                    </li>
+                    <li className="flex gap-3 items-center">
+                      <span className="bg-[#E50914]/20 text-[#E50914] w-6 h-6 rounded-full flex items-center justify-center shrink-0 font-bold text-xs">2</span>
+                      <span>Scroll down and select <span className="text-white font-bold">"Add to Home Screen"</span>.</span>
+                    </li>
+                    <li className="flex gap-3 items-center text-blue-400 font-medium">
+                      <span className="bg-blue-500/20 w-6 h-6 rounded-full flex items-center justify-center shrink-0 animate-pulse">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                      </span>
+                      <span>Look for the icon in your browser toolbar.</span>
+                    </li>
+                  </ul>
+                ) : (
+                  <ul className="space-y-4 text-gray-300">
+                    <li className="flex gap-3 items-center">
+                      <span className="bg-[#E50914]/20 text-[#E50914] w-6 h-6 rounded-full flex items-center justify-center shrink-0 font-bold text-xs">1</span>
+                      <span>Tap the <span className="text-white font-bold">"INSTALL APP NOW"</span> button below.</span>
+                    </li>
+                    <li className="flex gap-3 items-center">
+                      <span className="bg-[#E50914]/20 text-[#E50914] w-6 h-6 rounded-full flex items-center justify-center shrink-0 font-bold text-xs">2</span>
+                      <span>If the button is disabled, tap the <span className="text-white font-bold text-lg">⊞</span> or <span className="text-white font-bold">Install</span> icon in your address bar.</span>
+                    </li>
+                  </ul>
+                )}
+              </div>
+              
+              {!isIOS && (
+                <button
+                  onClick={handleInstall}
+                  disabled={!deferredPrompt}
+                  className={`w-full py-5 rounded-xl font-black text-xl transition-all transform active:scale-95 ${
+                    deferredPrompt 
+                      ? 'bg-[#E50914] text-white shadow-xl shadow-red-600/20' 
+                      : 'bg-gray-700 text-gray-400 cursor-not-allowed opacity-50'
+                  }`}
+                >
+                  {deferredPrompt ? 'INSTALL APP NOW' : 'WAITING FOR BROWSER...'}
+                </button>
               )}
             </div>
           )}
